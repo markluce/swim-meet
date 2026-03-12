@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { nameZh, schoolZh, eventNameZh, localize } from '../i18n/contentZh';
 
 export default function ResultsPage({ simData }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   // Only show final events with results
   const finalEvents = Object.values(simData)
@@ -14,11 +15,12 @@ export default function ResultsPage({ simData }) {
       <h2 className="text-xl font-bold text-gray-900 mb-6">{t('finalSummary')}</h2>
 
       {finalEvents.length === 0 && (
-        <div className="text-center py-12 text-gray-400 text-sm">No final results yet</div>
+        <div className="text-center py-12 text-gray-400 text-sm">
+          {lang === 'zh' ? '尚無決賽成績' : 'No final results yet'}
+        </div>
       )}
 
       {finalEvents.map((eventData) => {
-        // Collect all entries across rounds, sorted by result
         const allEntries = eventData.rounds
           .flatMap((r) => r.entries)
           .filter((e) => e.result)
@@ -29,7 +31,7 @@ export default function ResultsPage({ simData }) {
           <div key={eventData.event.id} className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 overflow-hidden">
             <div className="bg-gray-50 px-4 py-2.5 border-b border-gray-200">
               <span className="font-semibold text-gray-800">
-                {t('event')} {eventData.event.id} - {eventData.event.name}
+                {t('event')} {eventData.event.id} - {localize(eventData.event.name, lang, eventNameZh)}
               </span>
             </div>
             <table className="w-full text-sm">
@@ -50,8 +52,8 @@ export default function ResultsPage({ simData }) {
                     }`}
                   >
                     <td className="px-4 py-2 font-semibold text-gray-700">{entry.overallRank}</td>
-                    <td className="px-4 py-2 text-gray-800">{entry.name}</td>
-                    <td className="px-4 py-2 text-gray-600">{entry.school}</td>
+                    <td className="px-4 py-2 text-gray-800">{localize(entry.name, lang, nameZh)}</td>
+                    <td className="px-4 py-2 text-gray-600">{localize(entry.school, lang, schoolZh)}</td>
                     <td className="px-4 py-2 text-right font-bold text-gray-900">
                       {entry.result.toFixed(2)}
                     </td>

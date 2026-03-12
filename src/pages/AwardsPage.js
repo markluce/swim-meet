@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { nameZh, schoolZh, eventNameZh, localize } from '../i18n/contentZh';
 
 export default function AwardsPage({ simData }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   // Only show final events with results
   const finalEvents = Object.values(simData)
@@ -30,7 +31,9 @@ export default function AwardsPage({ simData }) {
       <h2 className="text-xl font-bold text-gray-900 mb-6">{t('awardList')}</h2>
 
       {awards.length === 0 && (
-        <div className="text-center py-12 text-gray-400 text-sm">No awards yet</div>
+        <div className="text-center py-12 text-gray-400 text-sm">
+          {lang === 'zh' ? '尚無獎項資料' : 'No awards yet'}
+        </div>
       )}
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -65,24 +68,26 @@ export default function AwardsPage({ simData }) {
               {awards.map((award) => (
                 <tr key={award.eventId} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="px-3 py-2.5 font-semibold text-gray-700">{award.eventId}</td>
-                  <td className="px-3 py-2.5 text-gray-600 text-xs">{award.eventName}</td>
-                  <td className="px-3 py-2.5 text-center font-medium text-gray-800">
-                    {award.first?.name || '--'}
-                  </td>
-                  <td className="px-3 py-2.5 text-center text-gray-500 text-xs">
-                    {award.first?.school || '--'}
+                  <td className="px-3 py-2.5 text-gray-600 text-xs">
+                    {localize(award.eventName, lang, eventNameZh)}
                   </td>
                   <td className="px-3 py-2.5 text-center font-medium text-gray-800">
-                    {award.second?.name || '--'}
+                    {award.first ? localize(award.first.name, lang, nameZh) : '--'}
                   </td>
                   <td className="px-3 py-2.5 text-center text-gray-500 text-xs">
-                    {award.second?.school || '--'}
+                    {award.first ? localize(award.first.school, lang, schoolZh) : '--'}
                   </td>
                   <td className="px-3 py-2.5 text-center font-medium text-gray-800">
-                    {award.third?.name || '--'}
+                    {award.second ? localize(award.second.name, lang, nameZh) : '--'}
                   </td>
                   <td className="px-3 py-2.5 text-center text-gray-500 text-xs">
-                    {award.third?.school || '--'}
+                    {award.second ? localize(award.second.school, lang, schoolZh) : '--'}
+                  </td>
+                  <td className="px-3 py-2.5 text-center font-medium text-gray-800">
+                    {award.third ? localize(award.third.name, lang, nameZh) : '--'}
+                  </td>
+                  <td className="px-3 py-2.5 text-center text-gray-500 text-xs">
+                    {award.third ? localize(award.third.school, lang, schoolZh) : '--'}
                   </td>
                 </tr>
               ))}

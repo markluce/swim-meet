@@ -1,16 +1,18 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { nameZh, schoolZh, eventNameZh, localize } from '../i18n/contentZh';
 
 export default function EventCard({ eventId, eventName, roundNum, totalRounds, entries }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const eventIdStr = String(eventId).padStart(3, '0');
+  const displayEventName = localize(eventName, lang, eventNameZh);
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 overflow-hidden">
       {/* Header bar */}
       <div className="bg-amber-50 border-l-4 border-amber-400 px-4 py-2.5">
         <span className="font-semibold text-gray-800">
-          {t('event')}: {eventIdStr}, {t('round')}: {roundNum}/{totalRounds}, {eventName}
+          {t('event')}: {eventIdStr}, {t('round')}: {roundNum}/{totalRounds}, {displayEventName}
         </span>
       </div>
 
@@ -36,11 +38,13 @@ export default function EventCard({ eventId, eventName, roundNum, totalRounds, e
                 } hover:bg-gray-50 transition-colors`}
               >
                 <td className="px-4 py-2.5 text-gray-500">{entry.lane}</td>
-                <td className="px-4 py-2.5 font-medium text-gray-800">{entry.name}</td>
+                <td className="px-4 py-2.5 font-medium text-gray-800">
+                  {localize(entry.name, lang, nameZh)}
+                </td>
                 <td className="px-4 py-2.5">
                   <span className="inline-flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-                    <span className="text-gray-600">{entry.school}</span>
+                    <span className="text-gray-600">{localize(entry.school, lang, schoolZh)}</span>
                   </span>
                 </td>
                 <td className="px-4 py-2.5 text-right text-gray-500">

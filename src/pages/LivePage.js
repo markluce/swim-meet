@@ -9,7 +9,7 @@ export default function LivePage({ simData, activeSession }) {
   // Filter events for current session that have results
   const sessionEvents = Object.values(simData)
     .filter((d) => d.event.session === session)
-    .sort((a, b) => b.event.id - a.event.id); // newest first
+    .sort((a, b) => a.event.id - b.event.id); // ascending order
 
   return (
     <div>
