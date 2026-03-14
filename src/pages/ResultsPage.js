@@ -30,47 +30,46 @@ export default function ResultsPage({ simData }) {
         {lang === 'zh' ? '決賽成績總覽' : 'Final Results Summary'}
       </h2>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-200 bg-gray-50 text-left text-gray-600">
-              <th className="px-4 py-2 w-16 font-medium">{t('rank')}</th>
-              <th className="px-4 py-2 font-medium">{lang === 'zh' ? '項目名稱' : 'Event Name'}</th>
-              <th className="px-4 py-2 font-medium">{t('team')}</th>
-              <th className="px-4 py-2 w-24 font-medium text-right">{t('time')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allEventsSummary.map((item) => {
-              const hasResults = item.entries.length > 0;
-              const topEntries = hasResults ? item.entries : [null];
-
-              return topEntries.map((entry, idx) => (
-                <tr
-                  key={`${item.event.id}-${idx}`}
-                  className={`border-b border-gray-100 ${
-                    entry && entry.overallRank <= 3 ? 'bg-yellow-50' : ''
-                  }`}
-                >
-                  <td className="px-4 py-2 font-semibold text-gray-700">
-                    {entry ? entry.overallRank : ''}
-                  </td>
-                  <td className="px-4 py-2 text-gray-800">
-                    {idx === 0
-                      ? `${t('event')} ${item.event.id} - ${localize(item.event.name, lang, eventNameZh)}`
-                      : ''}
-                  </td>
-                  <td className="px-4 py-2 text-gray-600">
-                    {entry ? localize(entry.school, lang, schoolZh) : ''}
-                  </td>
-                  <td className="px-4 py-2 text-right font-bold text-gray-900">
-                    {entry ? entry.result.toFixed(2) : ''}
-                  </td>
+      <div className="space-y-4 mb-8">
+        {allEventsSummary.map((item) => (
+          <div key={item.event.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200 bg-gray-50 text-left text-gray-600">
+                  <th className="px-4 py-2 w-16 font-medium">{t('rank')}</th>
+                  <th className="px-4 py-2 font-medium">
+                    {`${t('event')} ${item.event.id} - ${localize(item.event.name, lang, eventNameZh)}`}
+                  </th>
+                  <th className="px-4 py-2 font-medium">School</th>
+                  <th className="px-4 py-2 w-24 font-medium text-right">{t('time')}</th>
                 </tr>
-              ));
-            })}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {item.entries.length > 0 ? (
+                  item.entries.map((entry, idx) => (
+                    <tr
+                      key={idx}
+                      className={`border-b border-gray-100 ${
+                        entry.overallRank <= 3 ? 'bg-yellow-50' : ''
+                      }`}
+                    >
+                      <td className="px-4 py-2 font-semibold text-gray-700">{entry.overallRank}</td>
+                      <td className="px-4 py-2 text-gray-800">{localize(entry.name, lang, nameZh)}</td>
+                      <td className="px-4 py-2 text-gray-600">{localize(entry.school, lang, schoolZh)}</td>
+                      <td className="px-4 py-2 text-right font-bold text-gray-900">{entry.result.toFixed(2)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className="border-b border-gray-100">
+                    <td className="px-4 py-2 text-gray-400" colSpan={4}>
+                      {lang === 'zh' ? '尚無成績' : 'No results yet'}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
 
       {/* Detailed results per event */}
