@@ -1,100 +1,130 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { nameZh, schoolZh, eventNameZh, localize } from '../i18n/contentZh';
+import { allEvents } from '../data/events';
 
 export default function AwardsPage({ simData }) {
   const { t, lang } = useLanguage();
 
-  // Only show final events with results
-  const finalEvents = Object.values(simData)
-    .filter((d) => d.event.isFinal && d.rounds.some((r) => r.entries.some((e) => e.result)))
-    .sort((a, b) => a.event.id - b.event.id);
+  // Only show Session 2 final events
+  const session2Finals = allEvents.filter((ev) => ev.session === 2 && ev.isFinal);
 
-  // Get top 3 for each event
-  const awards = finalEvents.map((eventData) => {
+  // Build awards for each Session 2 final event
+  const awards = session2Finals.map((ev) => {
+    const eventData = simData[ev.id];
+    if (!eventData) return { event: ev, first: null, second: null, third: null };
+
     const allEntries = eventData.rounds
       .flatMap((r) => r.entries)
       .filter((e) => e.result)
       .sort((a, b) => a.result - b.result);
 
     return {
-      eventId: eventData.event.id,
-      eventName: eventData.event.name,
+      event: ev,
       first: allEntries[0] || null,
       second: allEntries[1] || null,
       third: allEntries[2] || null,
     };
   });
 
+  // Check if any event has results
+  const hasAnyResults = awards.some((a) => a.first || a.second || a.third);
+
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-6">{t('awardList')}</h2>
+      <h2 className="text-xl font-bold text-gray-900 mb-2">{t('awardList')}</h2>
+      <p className="text-sm text-gray-500 mb-6">
+        {lang === 'zh' ? 'Session 2 決賽前三名' : 'Session 2 Finals — Top 3'}
+      </p>
 
-      {awards.length === 0 && (
+      {!hasAnyResults && (
         <div className="text-center py-12 text-gray-400 text-sm">
           {lang === 'zh' ? '尚無獎項資料' : 'No awards yet'}
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="px-3 py-2.5 text-left font-medium text-gray-600 w-12">{t('event')}</th>
-                <th className="px-3 py-2.5 text-left font-medium text-gray-600"></th>
-                <th className="px-3 py-2.5 text-center font-medium text-amber-600" colSpan={2}>
-                  {t('firstPlace')}
-                </th>
-                <th className="px-3 py-2.5 text-center font-medium text-gray-500" colSpan={2}>
-                  {t('secondPlace')}
-                </th>
-                <th className="px-3 py-2.5 text-center font-medium text-orange-700" colSpan={2}>
-                  {t('thirdPlace')}
-                </th>
-              </tr>
-              <tr className="border-b border-gray-200 bg-gray-50 text-xs text-gray-500">
-                <th className="px-3 py-1"></th>
-                <th className="px-3 py-1"></th>
-                <th className="px-3 py-1 text-center">{t('name')}</th>
-                <th className="px-3 py-1 text-center">{t('school')}</th>
-                <th className="px-3 py-1 text-center">{t('name')}</th>
-                <th className="px-3 py-1 text-center">{t('school')}</th>
-                <th className="px-3 py-1 text-center">{t('name')}</th>
-                <th className="px-3 py-1 text-center">{t('school')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {awards.map((award) => (
-                <tr key={award.eventId} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="px-3 py-2.5 font-semibold text-gray-700">{award.eventId}</td>
-                  <td className="px-3 py-2.5 text-gray-600 text-xs">
-                    {localize(award.eventName, lang, eventNameZh)}
-                  </td>
-                  <td className="px-3 py-2.5 text-center font-medium text-gray-800">
-                    {award.first ? localize(award.first.name, lang, nameZh) : '--'}
-                  </td>
-                  <td className="px-3 py-2.5 text-center text-gray-500 text-xs">
-                    {award.first ? localize(award.first.school, lang, schoolZh) : '--'}
-                  </td>
-                  <td className="px-3 py-2.5 text-center font-medium text-gray-800">
-                    {award.second ? localize(award.second.name, lang, nameZh) : '--'}
-                  </td>
-                  <td className="px-3 py-2.5 text-center text-gray-500 text-xs">
-                    {award.second ? localize(award.second.school, lang, schoolZh) : '--'}
-                  </td>
-                  <td className="px-3 py-2.5 text-center font-medium text-gray-800">
-                    {award.third ? localize(award.third.name, lang, nameZh) : '--'}
-                  </td>
-                  <td className="px-3 py-2.5 text-center text-gray-500 text-xs">
-                    {award.third ? localize(award.third.school, lang, schoolZh) : '--'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {hasAnyResults && (
+        <div className="space-y-3">
+          {awards.map((award) => {
+            const hasResults = award.first || award.second || award.third;
+            return (
+              <div
+                key={award.event.id}
+                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
+              >
+                {/* Event header */}
+                <div className="bg-gray-50 px-4 py-2.5 border-b border-gray-200">
+                  <span className="font-semibold text-gray-800">
+                    {t('event')} {award.event.id} — {localize(award.event.name, lang, eventNameZh)}
+                  </span>
+                </div>
+
+                {hasResults ? (
+                  <div className="divide-y divide-gray-100">
+                    {/* Gold - First Place */}
+                    <div className="flex items-center px-4 py-3" style={{ backgroundColor: '#fef9c310' }}>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style={{ backgroundColor: '#FFD700', color: '#7c6200' }}>
+                        1
+                      </div>
+                      <div className="ml-3 flex-1">
+                        <span className="font-semibold text-gray-900">
+                          {award.first ? localize(award.first.name, lang, nameZh) : '--'}
+                        </span>
+                        <span className="ml-2 text-sm text-gray-500">
+                          {award.first ? localize(award.first.school, lang, schoolZh) : '--'}
+                        </span>
+                      </div>
+                      <div className="font-bold text-gray-900">
+                        {award.first ? award.first.result.toFixed(2) : '--'}
+                      </div>
+                    </div>
+
+                    {/* Silver - Second Place */}
+                    <div className="flex items-center px-4 py-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style={{ backgroundColor: '#C0C0C0', color: '#4a4a4a' }}>
+                        2
+                      </div>
+                      <div className="ml-3 flex-1">
+                        <span className="font-semibold text-gray-900">
+                          {award.second ? localize(award.second.name, lang, nameZh) : '--'}
+                        </span>
+                        <span className="ml-2 text-sm text-gray-500">
+                          {award.second ? localize(award.second.school, lang, schoolZh) : '--'}
+                        </span>
+                      </div>
+                      <div className="font-bold text-gray-900">
+                        {award.second ? award.second.result.toFixed(2) : '--'}
+                      </div>
+                    </div>
+
+                    {/* Copper - Third Place */}
+                    <div className="flex items-center px-4 py-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style={{ backgroundColor: '#CD7F32', color: '#fff' }}>
+                        3
+                      </div>
+                      <div className="ml-3 flex-1">
+                        <span className="font-semibold text-gray-900">
+                          {award.third ? localize(award.third.name, lang, nameZh) : '--'}
+                        </span>
+                        <span className="ml-2 text-sm text-gray-500">
+                          {award.third ? localize(award.third.school, lang, schoolZh) : '--'}
+                        </span>
+                      </div>
+                      <div className="font-bold text-gray-900">
+                        {award.third ? award.third.result.toFixed(2) : '--'}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="px-4 py-4 text-gray-400 text-sm">
+                    {lang === 'zh' ? '尚無成績' : 'No results yet'}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
-      </div>
+      )}
     </div>
   );
 }
