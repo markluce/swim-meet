@@ -38,6 +38,15 @@ export const schoolZh = {
   'AST': 'American School Taichung 台中美國學校',
 };
 
+// School full names (English)
+export const schoolFullName = {
+  'KSS': 'Kuei Shan School',
+  'MAK': 'Morrison Academy Kaohsiung',
+  'TES': 'Taipei European School',
+  'DIS': 'Dominican International School',
+  'AST': 'American School Taichung',
+};
+
 // School color mapping
 export const schoolColors = {
   'KSS': { bg: '#1E40AF', text: '#FFFFFF' },  // Blue

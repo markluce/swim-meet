@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { nameZh, schoolZh, schoolColors, eventNameZh, localize } from '../i18n/contentZh';
+import { nameZh, schoolZh, schoolFullName, schoolColors, eventNameZh, localize } from '../i18n/contentZh';
 import { allEvents } from '../data/events';
 
 export default function AwardsPage({ simData }) {
@@ -72,7 +72,12 @@ export default function AwardsPage({ simData }) {
                         </span>
                         {award.first && (() => {
                           const colors = schoolColors[award.first.school] || { bg: '#6B7280', text: '#FFFFFF' };
-                          return <span className="ml-2 inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.first.school}</span>;
+                          return (
+                            <span className="ml-2 inline-flex items-center gap-1">
+                              <span className="inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.first.school}</span>
+                              <span className="text-gray-500 text-xs">{schoolFullName[award.first.school] || ''}</span>
+                            </span>
+                          );
                         })()}
                         {!award.first && <span className="ml-2 text-sm text-gray-500">--</span>}
                       </div>
@@ -92,7 +97,12 @@ export default function AwardsPage({ simData }) {
                         </span>
                         {award.second && (() => {
                           const colors = schoolColors[award.second.school] || { bg: '#6B7280', text: '#FFFFFF' };
-                          return <span className="ml-2 inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.second.school}</span>;
+                          return (
+                            <span className="ml-2 inline-flex items-center gap-1">
+                              <span className="inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.second.school}</span>
+                              <span className="text-gray-500 text-xs">{schoolFullName[award.second.school] || ''}</span>
+                            </span>
+                          );
                         })()}
                         {!award.second && <span className="ml-2 text-sm text-gray-500">--</span>}
                       </div>
@@ -112,7 +122,12 @@ export default function AwardsPage({ simData }) {
                         </span>
                         {award.third && (() => {
                           const colors = schoolColors[award.third.school] || { bg: '#6B7280', text: '#FFFFFF' };
-                          return <span className="ml-2 inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.third.school}</span>;
+                          return (
+                            <span className="ml-2 inline-flex items-center gap-1">
+                              <span className="inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.third.school}</span>
+                              <span className="text-gray-500 text-xs">{schoolFullName[award.third.school] || ''}</span>
+                            </span>
+                          );
                         })()}
                         {!award.third && <span className="ml-2 text-sm text-gray-500">--</span>}
                       </div>

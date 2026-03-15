@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { nameZh, schoolZh, schoolColors, eventNameZh, localize } from '../i18n/contentZh';
+import { nameZh, schoolZh, schoolFullName, schoolColors, eventNameZh, localize } from '../i18n/contentZh';
 
 export default function EventCard({ eventId, eventName, roundNum, totalRounds, entries }) {
   const { t, lang } = useLanguage();
@@ -42,17 +42,17 @@ export default function EventCard({ eventId, eventName, roundNum, totalRounds, e
                   {localize(entry.name, lang, nameZh)}
                 </td>
                 <td className="px-4 py-2.5">
-                  {(() => {
-                    const colors = schoolColors[entry.school] || { bg: '#6B7280', text: '#FFFFFF' };
-                    return (
-                      <span
-                        className="inline-block px-2 py-0.5 rounded text-xs font-bold"
-                        style={{ backgroundColor: colors.bg, color: colors.text }}
-                      >
-                        {entry.school}
-                      </span>
-                    );
-                  })()}
+                  <span className="inline-flex items-center gap-1.5">
+                    {(() => {
+                      const colors = schoolColors[entry.school] || { bg: '#6B7280', text: '#FFFFFF' };
+                      return (
+                        <span className="inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>
+                          {entry.school}
+                        </span>
+                      );
+                    })()}
+                    <span className="text-gray-600 text-xs">{schoolFullName[entry.school] || ''}</span>
+                  </span>
                 </td>
                 <td className="px-4 py-2.5 text-right text-gray-500">
                   {entry.referTime ? entry.referTime.toFixed(2) : t('noResult')}
