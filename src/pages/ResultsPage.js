@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { nameZh, schoolZh, eventNameZh, localize } from '../i18n/contentZh';
+import { nameZh, schoolZh, schoolColors, eventNameZh, localize } from '../i18n/contentZh';
 import { allEvents } from '../data/events';
 
 export default function ResultsPage({ simData }) {
@@ -55,7 +55,16 @@ export default function ResultsPage({ simData }) {
                     >
                       <td className="px-4 py-2 font-semibold text-gray-700">{entry.overallRank}</td>
                       <td className="px-4 py-2 text-gray-800">{localize(entry.name, lang, nameZh)}</td>
-                      <td className="px-4 py-2 text-gray-600">{localize(entry.school, lang, schoolZh)}</td>
+                      <td className="px-4 py-2">
+                        {(() => {
+                          const colors = schoolColors[entry.school] || { bg: '#6B7280', text: '#FFFFFF' };
+                          return (
+                            <span className="inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>
+                              {entry.school}
+                            </span>
+                          );
+                        })()}
+                      </td>
                       <td className="px-4 py-2 text-right font-bold text-gray-900">{entry.result.toFixed(2)}</td>
                     </tr>
                   ))

@@ -1,7 +1,6 @@
 // Simulated swimmer data and result generation
 const schools = [
-  'Taipei American School', 'Morrison Academy', 'Kaohsiung American School',
-  'Taichung International School', 'Dominican International School', 'Hsinchu International School',
+  'KSS', 'MAK', 'TES', 'DIS', 'AST',
 ];
 
 const girlNames = [

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { nameZh, schoolZh, eventNameZh, localize } from '../i18n/contentZh';
+import { nameZh, schoolZh, schoolColors, eventNameZh, localize } from '../i18n/contentZh';
 import { allEvents } from '../data/events';
 
 export default function AwardsPage({ simData }) {
@@ -70,9 +70,11 @@ export default function AwardsPage({ simData }) {
                         <span className="font-semibold text-gray-900">
                           {award.first ? localize(award.first.name, lang, nameZh) : '--'}
                         </span>
-                        <span className="ml-2 text-sm text-gray-500">
-                          {award.first ? localize(award.first.school, lang, schoolZh) : '--'}
-                        </span>
+                        {award.first && (() => {
+                          const colors = schoolColors[award.first.school] || { bg: '#6B7280', text: '#FFFFFF' };
+                          return <span className="ml-2 inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.first.school}</span>;
+                        })()}
+                        {!award.first && <span className="ml-2 text-sm text-gray-500">--</span>}
                       </div>
                       <div className="font-bold text-gray-900">
                         {award.first ? award.first.result.toFixed(2) : '--'}
@@ -88,9 +90,11 @@ export default function AwardsPage({ simData }) {
                         <span className="font-semibold text-gray-900">
                           {award.second ? localize(award.second.name, lang, nameZh) : '--'}
                         </span>
-                        <span className="ml-2 text-sm text-gray-500">
-                          {award.second ? localize(award.second.school, lang, schoolZh) : '--'}
-                        </span>
+                        {award.second && (() => {
+                          const colors = schoolColors[award.second.school] || { bg: '#6B7280', text: '#FFFFFF' };
+                          return <span className="ml-2 inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.second.school}</span>;
+                        })()}
+                        {!award.second && <span className="ml-2 text-sm text-gray-500">--</span>}
                       </div>
                       <div className="font-bold text-gray-900">
                         {award.second ? award.second.result.toFixed(2) : '--'}
@@ -106,9 +110,11 @@ export default function AwardsPage({ simData }) {
                         <span className="font-semibold text-gray-900">
                           {award.third ? localize(award.third.name, lang, nameZh) : '--'}
                         </span>
-                        <span className="ml-2 text-sm text-gray-500">
-                          {award.third ? localize(award.third.school, lang, schoolZh) : '--'}
-                        </span>
+                        {award.third && (() => {
+                          const colors = schoolColors[award.third.school] || { bg: '#6B7280', text: '#FFFFFF' };
+                          return <span className="ml-2 inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: colors.bg, color: colors.text }}>{award.third.school}</span>;
+                        })()}
+                        {!award.third && <span className="ml-2 text-sm text-gray-500">--</span>}
                       </div>
                       <div className="font-bold text-gray-900">
                         {award.third ? award.third.result.toFixed(2) : '--'}

@@ -29,14 +29,22 @@ export const nameZh = {
   'Jack Kuo': '郭傑克',
 };
 
-// School names → Chinese
+// School names → Full name + Chinese
 export const schoolZh = {
-  'Taipei American School': '台北美國學校',
-  'Morrison Academy': '馬禮遜美國學校',
-  'Kaohsiung American School': '高雄美國學校',
-  'Taichung International School': '台中國際學校',
-  'Dominican International School': '道明國際學校',
-  'Hsinchu International School': '新竹國際學校',
+  'KSS': 'Kuei Shan School 葳格國際學校',
+  'MAK': 'Morrison Academy Kaohsiung 馬禮遜美國學校高雄',
+  'TES': 'Taipei European School 台北歐洲學校',
+  'DIS': 'Dominican International School 道明國際學校',
+  'AST': 'American School Taichung 台中美國學校',
+};
+
+// School color mapping
+export const schoolColors = {
+  'KSS': { bg: '#1E40AF', text: '#FFFFFF' },  // Blue
+  'MAK': { bg: '#DC2626', text: '#FFFFFF' },  // Red
+  'TES': { bg: '#059669', text: '#FFFFFF' },  // Green
+  'DIS': { bg: '#7C3AED', text: '#FFFFFF' },  // Purple
+  'AST': { bg: '#D97706', text: '#FFFFFF' },  // Amber
 };
 
 // Event name keyword → Chinese mapping
